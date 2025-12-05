@@ -37,7 +37,7 @@ class Settings(BaseSettings):
     SMS_API_KEY: str = ""
     
     # CORS
-    CORS_ORIGINS: List[str] = ["http://localhost:3000", "http://localhost:8000"]
+    CORS_ORIGINS: List[str] = ["http://localhost:3000", "http://localhost:8000", "https://dispute-with-culture.com"]
     
     class Config:
         env_file = ".env"

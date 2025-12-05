@@ -8,10 +8,10 @@ from app.core.database import Base
 
 class PreorderStatusType(str, enum.Enum):
     """Статусы предзаказов"""
-    COLLECTING = "collecting"  # Набор предзаказов
-    PRODUCTION = "production"  # Производство изделий
-    TRACKING = "tracking"  # Формирование трек-номера
-    SHIPPING = "shipping"  # Отправка изделий
+    COLLECTING = "Набор предзаказов"
+    PRODUCTION = "Производство изделий"
+    TRACKING = "Формирование трек-номера"
+    SHIPPING = "Отправка изделий"
 
 
 class PreorderWave(Base):

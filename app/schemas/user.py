@@ -36,6 +36,11 @@ class UserUpdate(BaseModel):
     vk: Optional[str] = None
 
 
+class PasswordChange(BaseModel):
+    current_password: str = Field(..., description="Текущий пароль")
+    new_password: str = Field(..., min_length=6, description="Новый пароль")
+
+
 class UserResponse(BaseModel):
     id: int
     phone: str

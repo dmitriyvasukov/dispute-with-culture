@@ -174,7 +174,7 @@ def upgrade() -> None:
         sa.Column('wave_number', sa.Integer(), nullable=False),
         sa.Column('capacity', sa.Integer(), nullable=False),
         sa.Column('current_count', sa.Integer(), nullable=True, default=0),
-        sa.Column('status', sa.Enum('COLLECTING', 'PRODUCTION', 'TRACKING', 'SHIPPING', name='preorderstatustype'), nullable=False),
+        sa.Column('status', sa.Enum('Набор предзаказов', 'Производство изделий', 'Формирование трек-номера', 'Отправка изделий', name='preorderstatustype'), nullable=False),
         sa.Column('is_completed', sa.Boolean(), nullable=True, default=False),
         sa.Column('created_at', sa.DateTime(), nullable=True),
         sa.Column('updated_at', sa.DateTime(), nullable=True),
@@ -215,4 +215,5 @@ def downgrade() -> None:
     op.execute('DROP TYPE IF EXISTS ordertype')
     op.execute('DROP TYPE IF EXISTS orderstatus')
     op.execute('DROP TYPE IF EXISTS paymentstatus')
+    # Note: preorderstatustype enum values changed, but dropping type
     op.execute('DROP TYPE IF EXISTS preorderstatustype')

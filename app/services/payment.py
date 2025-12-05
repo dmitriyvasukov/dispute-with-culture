@@ -65,7 +65,7 @@ class PaymentService:
             },
             "items": [
                 {
-                    "description": f"{item.product.name} ({item.size})",
+                    "description": f"{item.product.name if item.product else 'Unknown Product'} ({item.size})",
                     "quantity": str(item.quantity),
                     "amount": {
                         "value": str(item.price),

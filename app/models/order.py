@@ -7,21 +7,20 @@ from app.core.database import Base
 
 
 class OrderStatus(str, enum.Enum):
-    """Статусы заказов"""
-    PENDING = "pending"  # Ожидает оплаты
-    PAID = "paid"  # Оплачен
-    PROCESSING = "processing"  # В обработке
-    SHIPPED = "shipped"  # Отправлен
-    DELIVERED = "delivered"  # Доставлен
-    CANCELLED = "cancelled"  # Отменён
+    """Статусы заказов (логистические)"""
+    created = "created"  # Создан
+    paid = "paid"  # Оплачен
+    shipped = "shipped"  # Отправлен
+    delivered = "delivered"  # Доставлен
+    cancelled = "cancelled"  # Отменён
 
 
 class PaymentStatus(str, enum.Enum):
     """Статусы оплаты"""
-    PENDING = "pending"
-    SUCCEEDED = "succeeded"
-    CANCELLED = "cancelled"
-    FAILED = "failed"
+    PENDING = "PENDING"
+    SUCCEEDED = "SUCCEEDED"
+    CANCELLED = "CANCELLED"
+    FAILED = "FAILED"
 
 
 class Order(Base):
@@ -38,18 +37,20 @@ class Order(Base):
     final_amount = Column(Float, nullable=False)
     
     # Status
-    status = Column(Enum(OrderStatus), default=OrderStatus.PENDING, nullable=False)
-    payment_status = Column(Enum(PaymentStatus), default=PaymentStatus.PENDING, nullable=False)
-    
+    status = Column(Enum(OrderStatus, values_callable=lambda x: [e.name for e in x]), default=OrderStatus.created, nullable=False)
+
+    # Payment
+    payment_status = Column(Enum(PaymentStatus, values_callable=lambda x: [e.name for e in x]), default=PaymentStatus.PENDING, nullable=True)
+    payment_id = Column(String(255), nullable=True)
+    payment_url = Column(String(500), nullable=True)
+    receipt_url = Column(String(500), nullable=True)
+    paid_at = Column(DateTime, nullable=True)
+
     # Delivery
     tracking_number = Column(String(255), nullable=True)
     delivery_address = Column(Text, nullable=True)
     cdek_point = Column(String(255), nullable=True)
-    
-    # Payment
-    payment_id = Column(String(255), nullable=True)  # ЮKassa payment ID
-    payment_url = Column(String(500), nullable=True)
-    receipt_url = Column(String(500), nullable=True)
+    postal_code = Column(String(10), nullable=True)
     
     # Promo code
     promo_code_id = Column(Integer, ForeignKey("promo_codes.id"), nullable=True)
@@ -57,7 +58,6 @@ class Order(Base):
     # Timestamps
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-    paid_at = Column(DateTime, nullable=True)
     shipped_at = Column(DateTime, nullable=True)
     
     # Relationships

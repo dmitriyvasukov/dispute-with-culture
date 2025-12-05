@@ -28,8 +28,8 @@ class Settings(BaseSettings):
     ADMIN_PASSWORD: str = "admin123"
     
     # ЮKassa
-    YUKASSA_SHOP_ID: str = ""
-    YUKASSA_SECRET_KEY: str = ""
+    YUKASSA_SHOP_ID: str = "1220486"
+    YUKASSA_SECRET_KEY: str = "test_XbJJR3kHH8y0zLjyuZ7JS7s9_KYL_MRsvkuhiJc6CEs"
     YUKASSA_RETURN_URL: str = "http://localhost:8000/api/v1/payment/callback"
     
     # SMS

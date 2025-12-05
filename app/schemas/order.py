@@ -1,6 +1,8 @@
 from pydantic import BaseModel, Field
-from typing import Optional, List
+from typing import Optional, List, Any
 from datetime import datetime
+
+from app.schemas.product import ProductResponse
 
 
 class OrderItemBase(BaseModel):
@@ -19,7 +21,8 @@ class OrderItemResponse(OrderItemBase):
     is_preorder: bool
     preorder_wave: Optional[int] = None
     created_at: datetime
-    
+    product: Optional[ProductResponse] = None  # Product data
+
     class Config:
         from_attributes = True
 
@@ -27,11 +30,13 @@ class OrderItemResponse(OrderItemBase):
 class OrderBase(BaseModel):
     delivery_address: Optional[str] = None
     cdek_point: Optional[str] = None
+    postal_code: Optional[str] = None
     promo_code: Optional[str] = None
 
 
 class OrderCreate(OrderBase):
-    items: List[OrderItemCreate] = Field(..., min_items=1)
+    items: Optional[List[OrderItemCreate]] = None
+    from_cart: bool = False
 
 
 class OrderUpdate(BaseModel):
@@ -39,6 +44,12 @@ class OrderUpdate(BaseModel):
     tracking_number: Optional[str] = None
     delivery_address: Optional[str] = None
     cdek_point: Optional[str] = None
+    postal_code: Optional[str] = None
+
+
+class BulkPreorderStatusUpdate(BaseModel):
+    order_ids: List[int]
+    status: str
 
 
 class OrderResponse(BaseModel):
@@ -48,18 +59,15 @@ class OrderResponse(BaseModel):
     discount_amount: float
     final_amount: float
     status: str
-    payment_status: str
     tracking_number: Optional[str] = None
     delivery_address: Optional[str] = None
     cdek_point: Optional[str] = None
-    payment_url: Optional[str] = None
-    receipt_url: Optional[str] = None
+    postal_code: Optional[str] = None
     created_at: datetime
     updated_at: datetime
-    paid_at: Optional[datetime] = None
     shipped_at: Optional[datetime] = None
     items: List[OrderItemResponse] = []
-    
+
     class Config:
         from_attributes = True
 

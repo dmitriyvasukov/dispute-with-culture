@@ -21,32 +21,36 @@ class ProductBase(BaseModel):
     description: Optional[str] = Field(None, description="Описание")
     article: str = Field(..., description="Артикул")
     price: float = Field(..., gt=0, description="Цена")
-    sizes: List[str] = Field(default_factory=list, description="Доступные размеры")
-    size_table: Optional[Dict[str, Any]] = Field(None, description="Таблица размеров")
+    oki_quantity: int = Field(default=0, description="Количество размера OKI")
+    big_quantity: int = Field(default=0, description="Количество размера BIG")
+    size_table: Optional[Dict[str, Any]] = Field(None, description="Таблица размеров (свойства размеров)")
     care_instructions: Optional[str] = Field(None, description="Инструкции по уходу")
+    preview_image_url: Optional[str] = Field(None, description="URL превью изображения для карточки товара")
 
 
 class ProductCreate(ProductBase):
     order_type: str = Field(default="order", description="Тип заказа: order, preorder, waiting")
-    stock_count: int = Field(default=0, description="Количество на складе")
     preorder_waves_total: int = Field(default=0, description="Количество волн предзаказа")
     preorder_wave_capacity: int = Field(default=0, description="Вместимость волны")
-    media_urls: List[str] = Field(default_factory=list, description="URL фотографий")
+    media_urls: List[str] = Field(default_factory=list, description="URL фотографий галереи")
 
 
 class ProductUpdate(BaseModel):
     name: Optional[str] = None
     description: Optional[str] = None
     price: Optional[float] = Field(None, gt=0)
-    sizes: Optional[List[str]] = None
+    oki_quantity: Optional[int] = None
+    big_quantity: Optional[int] = None
     size_table: Optional[Dict[str, Any]] = None
     care_instructions: Optional[str] = None
+    preview_image_url: Optional[str] = None
     order_type: Optional[str] = None
-    stock_count: Optional[int] = None
     preorder_waves_total: Optional[int] = None
     preorder_wave_capacity: Optional[int] = None
+    production_status: Optional[str] = None
     is_active: Optional[bool] = None
     is_archived: Optional[bool] = None
+    media_urls: Optional[List[str]] = None
 
 
 class ProductResponse(ProductBase):
@@ -57,12 +61,14 @@ class ProductResponse(ProductBase):
     preorder_wave_capacity: int
     current_wave: int
     current_wave_count: int
+    production_status: Optional[str] = None  # Статус производства для предзаказов
     is_active: bool
     is_archived: bool
     created_at: datetime
     updated_at: datetime
     media: List[ProductMediaResponse] = []
-    
+    sizes: Dict[str, int]  # Для совместимости с фронтендом
+
     class Config:
         from_attributes = True
 

@@ -17,8 +17,7 @@ ENV/
 *~
 
 # Environment
-.env
-.env.local
+
 
 # Database
 *.db
